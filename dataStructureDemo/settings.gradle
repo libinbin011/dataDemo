@@ -1,0 +1,4 @@
+rootProject.name = 'dataStructureDemo'
+include 'basicDataStructure'
+include 'useCase'
+
