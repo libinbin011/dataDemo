@@ -1,3 +1,6 @@
+package linearStructure
+
+
 class SingleLinkedWithoutHead<T> {
     /*
     * 带头结点的单链表初始化，空链表初始化时有头结点，并且头结点的next=null*/
@@ -8,8 +11,6 @@ class SingleLinkedWithoutHead<T> {
         private set
     val second
         get() = first?.next
-    val third
-        get() = second?.next
     val last: Entry<T>?
         get() {
             var node = first
@@ -41,18 +42,18 @@ class SingleLinkedWithoutHead<T> {
     fun insertFromTail(data: T) {
         length++
         val node = Entry(data)
-        if(first == null)
-        {
-            first = node
-            return
-        }
+//        if(first == null)
+//        {
+//            first = node
+//            return
+//        }
         last?.next = node
     }
 
 
     //    按序号查找
 
-    fun findN(i: Int): Entry<T>? {
+    fun getByIndex(i: Int): Entry<T>? {
 //        序号小于等于0返回首元节点，大于链表长度返回最后一个节点
         if (i < 1)
             return first
@@ -75,7 +76,7 @@ class SingleLinkedWithoutHead<T> {
 
     //    按值查找
 
-    fun findI(data: T): Int {
+    fun getIndex(data: T): Int {
         var node = first
         var j = 0
         while (node != null) {
@@ -89,7 +90,7 @@ class SingleLinkedWithoutHead<T> {
 
     //    中间插入操作
     fun insert(i: Int, data: T) {
-        length++
+
         //    1.如果序号小于等于0直接头插
         if (i < 1) {
             insertFromHead(data)
@@ -103,18 +104,19 @@ class SingleLinkedWithoutHead<T> {
         //    3. 0<i<size 时 才是中间插入
 
         // 首先找到第i-1个节点
-        val precursorNode = findN(i - 1)!!
+        val precursorNode = getByIndex(i - 1)!!
         // 创建要插入的节点对象,并让next指向原先的第i个节点
         val newNode = Entry(data, precursorNode.next)
 
         // 补全挂链操作让新节点称为前驱节点的next
 
         precursorNode.next = newNode
+        length++
 
     }
 
     //    按序号删除
-    fun deleteN(i: Int) {
+    fun delete(i: Int) {
         if(i < 0 || i >= length)
             return
         length--
@@ -122,12 +124,12 @@ class SingleLinkedWithoutHead<T> {
             first = second
             return
         }
-        val precursorNode = findN(i - 1)!!
+        val precursorNode = getByIndex(i - 1)!!
         precursorNode.next = precursorNode.next?.next
     }
 
     //    按值删除第一个
-    fun delete(data: T) {
+    fun deleteByData(data: T) {
 //        val node: Entry<T> = first ?: return
 //        if (node.data == data) {
 //            length--
@@ -166,24 +168,36 @@ class SingleLinkedWithoutHead<T> {
 
 
     fun deleteLast(data: T) {
-//        val node = first ?: return
-//        if(node.data == data) {
-//            length--
-//            first = second
-//            return
-//        }
-//
-//        var cur = first
-//        var pre: Entry<T>? = null
-//        while (cur != null) {
-//            if (cur.next?.data == data)
-//                pre = cur
-//            cur = cur.next
-//        }
-//        if (pre == null)
-//            return
-//        length--
-//        pre.next = pre.next?.next
+        var cur:Entry<T>? = first ?: return
+        var pre: Entry<T>? = null
+        if(cur?.data == data) { // first.data = data 单独处理
+            // 1.同样找完整链
+            while (cur != null) {
+                if (cur.next?.data == data)
+                    pre = cur // 记录data节点的前驱节点
+                cur = cur.next
+        }
+            if (pre == null){  //如果找完整条链前驱节点为空  就删除first
+                first = second
+                length--
+                return
+            }
+             // 不为空
+            length--
+            pre.next = pre.next?.next
+
+        }
+
+
+        while (cur != null) {
+            if (cur.next?.data == data)
+                pre = cur
+            cur = cur.next
+        }
+        if (pre == null)
+            return
+        length--
+        pre.next = pre.next?.next
     }
 
     fun clear() {
@@ -192,58 +206,3 @@ class SingleLinkedWithoutHead<T> {
 
 
 }
-
-//fun dayinfengexian(i: Int) {
-//    var j = 0
-//    while (j < i) {
-//        println("***--------------***")
-//        j++
-//    }
-//}
-//
-
-//fun main(args: Array<String>) {
-//
-//    // 测试一个整型链表
-//
-//    val iSingleLinked = SingleLinked<Int>()
-//
-//    for (i in 0..99) {
-//        iSingleLinked.insertFromTail(i)
-//    }
-//
-//    println(iSingleLinked.length)
-//    println(iSingleLinked.last?.data)
-//    println(iSingleLinked.findI(10))
-//    println(iSingleLinked.findN(10)?.data)
-//
-//    dayinfengexian(1)
-//
-//
-//    iSingleLinked.insertFromHead(8888)
-//    println(iSingleLinked.findI(0))
-//    println(iSingleLinked.findI(10))
-//    println(iSingleLinked.findN(10)?.data)
-//
-//    dayinfengexian(2)
-//
-//    iSingleLinked.insertFromTail(6666)
-//    println(iSingleLinked.last?.data)
-//    println(iSingleLinked.findI(6666))
-//    println(iSingleLinked.findN(100)?.data)
-//    println(iSingleLinked.findN(101)?.data)
-//    println(iSingleLinked.findN(102)?.data)
-//
-//
-//    dayinfengexian(3)
-//
-//
-//}
-//
-//
-////fun main(args: Array<String>) {
-////    val link = SingleLinked<Int>()
-////    link.insertFromHead(1)
-////    link.insertFromHead(2)
-////    println(link.head.next?.data)
-////}

@@ -1,3 +1,5 @@
+package linearStructure
+
 class SingleLinkedWithHead<T> {
     /*
     * 带头结点的单链表初始化，空链表初始化时有头结点，并且头结点的next=null*/
@@ -18,8 +20,8 @@ class SingleLinkedWithHead<T> {
     *  5. 删除
     */
     //    找到表尾元素
-    fun findLast(): Entry<T> {
-        var node = firstNode
+    fun findLast(): Entry<T>? {
+        var node:Entry<T>? = firstNode ?:return null
         while (node?.next != null) {
             node = node.next
         }
@@ -56,34 +58,27 @@ class SingleLinkedWithHead<T> {
 
         var lastNode = findLast()
 
-        lastNode.next = Entry(data)
+        lastNode?.next = Entry(data)
     }
 
 
     //    按序号查找
 
-    fun findN(i: Int): Entry<T>? {
+    fun getByIndex(i: Int): Entry<T>? {
+        var j = 0
+        var node:Entry<T>? = firstNode ?: return null
 
-        var size = length()
-
-        if (size == 0) {
-            return null
-        }
-
-//        序号小于等于0返回首元节点，大于链表长度返回最后一个节点
+//        规定 序号小于等于0返回首元节点，大于链表长度返回最后一个节点
 
         if (i < 1) {
             return firstNode
         }
 
-        if (i >= size - 1) {
+        if (i >= length() - 1) {
             return findLast()
         }
 
 //        经过上面条件分支执行后  只有0<i<size-1时  才会进入以下流程 while顺链查找 直到j=i时出循环就是第i个元素
-
-        var j = 0
-        var node = firstNode
 
         while (j < i) {
             node = node!!.next
@@ -94,7 +89,7 @@ class SingleLinkedWithHead<T> {
 
     //    按值查找
 
-    fun findI(data: T): Int {
+    fun getIndex(data: T): Int {
         var node = firstNode
         var j = 0
         while (node?.data != data && node?.next != null) {
@@ -122,7 +117,7 @@ class SingleLinkedWithHead<T> {
         //    3. 0<i<size 时 才是中间插入
 
         // 首先找到第i-1个节点
-        var precursorNode = findN(i - 1)
+        var precursorNode = getByIndex(i - 1)
 
         // 创建要插入的节点对象,并让next指向原先的第i个节点
         var newNode = Entry<T>(data, precursorNode?.next)
@@ -135,13 +130,13 @@ class SingleLinkedWithHead<T> {
 
     //    按序号删除
     fun delete(i: Int) {
-        var precursorNode = findN(i - 1)
+        var precursorNode = getByIndex(i - 1)
 
         precursorNode?.next = precursorNode?.next?.next
     }
 
     //    按值删除第一个
-    fun delete(data: T) {
+    fun deleteByData(data: T) {
         if (firstNode == null) {
             return
         }
