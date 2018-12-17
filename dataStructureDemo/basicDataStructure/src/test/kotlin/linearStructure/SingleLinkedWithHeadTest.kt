@@ -163,7 +163,7 @@ class SingleLinkedWithHeadTest{
         strLink.deleteLast(b)
         personLink.deleteLast(per1)
 
-//        assertEquals(12,intLink.length())
+        assertEquals(12,intLink.length())
 
         assertEquals(intList[0],intLink.getByIndex(0)?.data)
         assertEquals(intList[1],intLink.getByIndex(1)?.data)
@@ -238,9 +238,25 @@ class SingleLinkedWithHeadTest{
         assertEquals(12,strLink.length())
 
 
+        intLink.clear()
+        strLink.clear()
+        personLink.clear()
+
+        assertEquals(0,intLink.length())
+        assertEquals(0,strLink.length())
+        assertEquals(0,personLink.length())
+
+        intLink.deleteLast(54)
+        intLink.delete(152)
+        intLink.deleteByData(77)
 
 
+        assertEquals(null,intLink.getByIndex(132))
+        assertEquals(null,intLink.getByIndex(0))
 
+        assertEquals(-1,intLink.getIndex(0))
+        assertEquals(-1,intLink.getIndex(156))
+        assertEquals(-1,intLink.getIndex(-156))
 
 
     }

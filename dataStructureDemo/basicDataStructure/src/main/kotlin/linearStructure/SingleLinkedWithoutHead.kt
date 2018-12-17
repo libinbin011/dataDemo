@@ -1,3 +1,5 @@
+package linearStructure
+
 class SingleLinkedWithoutHead<T> {
     /*
     * 带头结点的单链表初始化，空链表初始化时有头结点，并且头结点的next=null*/
