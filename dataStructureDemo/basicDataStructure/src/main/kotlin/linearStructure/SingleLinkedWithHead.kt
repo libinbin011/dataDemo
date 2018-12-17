@@ -44,21 +44,24 @@ class SingleLinkedWithHead<T> {
 
     //    头插法
     fun createFromHead(data: T) {
-        var node = Entry(data, firstNode)
+        var node = Entry<T>(data, firstNode)
         firstNode = node
+        head.next = node
     }
 
     //    尾插法
     fun createFromTail(data: T) {
         if (firstNode == null) {
-            firstNode = Entry(data)
+            var node = Entry<T>(data)
+            firstNode = node
+            head.next = node
             return
         }
 
 
         var lastNode = findLast()
 
-        lastNode?.next = Entry(data)
+        lastNode?.next = Entry<T>(data)
     }
 
 
@@ -109,10 +112,12 @@ class SingleLinkedWithHead<T> {
         //    1.如果序号小于等于0直接头插
         if (i < 1) {
             createFromHead(data)
+            return
         }
         //    2.如果序号大于等于链表长度直接尾插
         if (i >= length()) {
             createFromTail(data)
+            return
         }
         //    3. 0<i<size 时 才是中间插入
 
@@ -130,6 +135,14 @@ class SingleLinkedWithHead<T> {
 
     //    按序号删除
     fun delete(i: Int) {
+        if (i<0||i>length()-1){
+            return
+        }
+        if (i == 0){
+            head.next = firstNode?.next
+            firstNode = firstNode?.next
+            return
+        }
         var precursorNode = getByIndex(i - 1)
 
         precursorNode?.next = precursorNode?.next?.next
@@ -137,12 +150,13 @@ class SingleLinkedWithHead<T> {
 
     //    按值删除第一个
     fun deleteByData(data: T) {
-        if (firstNode == null) {
-            return
-        }
-        var node = head
-        while (node.next?.data != data && node.next != null) {
-            node = node.next!!
+
+        var precursorNode = head
+        var node:Entry<T>? = firstNode
+
+        while (node?.data != data && node != null) {
+            precursorNode = node
+            node = node.next
         }
 
         // 出来循环有2种可能
@@ -150,11 +164,11 @@ class SingleLinkedWithHead<T> {
         // 2.data无效 么有这个节点，当然也么有前驱节点 此时 node.next= NULL
         // (重点理解一下程序执行过程中，不可能出现node.data=data 情况，如果node是最后一个节点，那就说明么有找到，如果可以找到，node最多是尾节点的前驱节点     )
 
-        if (node.next == null) {
+        if (node == null) {
             return
         }
+        precursorNode.next = node.next
 
-        node.next = node.next?.next
     }
 
     //  按值删除最后一个
@@ -168,18 +182,25 @@ class SingleLinkedWithHead<T> {
         if (firstNode == null) {
             return
         }
-        var node = head
-        var precursorNode: Entry<T>? = null
-        while (node.next != null) {
-            if (node.next?.data == data) {
-                precursorNode = node
+        var node:Entry<T>? = head
+        var precursorNode :Entry<T>? = null
+        var toDeleteNode :Entry<T>? = null
+        var toDeletePrecursorNode: Entry<T>? = null
+        while (node != null) {
+            if (node.data == data) { // 如果节点的数据与形参相同  记录下来此时的节点和前驱，  等待最后删除操作
+                toDeletePrecursorNode = precursorNode
+                toDeleteNode = node
             }
-            node = node.next!!
-        }
-        if (precursorNode == null) {
+            precursorNode =node // 记录 节点的前驱
+            node = node.next  // 节点后移
+    }
+        if (toDeletePrecursorNode == null) {
             return
         }
-        precursorNode.next = precursorNode.next?.next
+
+
+        toDeletePrecursorNode.next = toDeleteNode?.next
+
 
     }
 
@@ -189,3 +210,4 @@ class SingleLinkedWithHead<T> {
 
 
 }
+

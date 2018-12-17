@@ -1,0 +1,5 @@
+package linearStructure
+
+class SingleLinkedWithoutHeadTest {
+
+}

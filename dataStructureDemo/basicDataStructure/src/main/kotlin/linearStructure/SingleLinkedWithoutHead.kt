@@ -1,6 +1,3 @@
-package linearStructure
-
-
 class SingleLinkedWithoutHead<T> {
     /*
     * 带头结点的单链表初始化，空链表初始化时有头结点，并且头结点的next=null*/
@@ -53,7 +50,7 @@ class SingleLinkedWithoutHead<T> {
 
     //    按序号查找
 
-    fun getByIndex(i: Int): Entry<T>? {
+    fun findByIndex(i: Int): Entry<T>? {
 //        序号小于等于0返回首元节点，大于链表长度返回最后一个节点
         if (i < 1)
             return first
@@ -104,7 +101,7 @@ class SingleLinkedWithoutHead<T> {
         //    3. 0<i<size 时 才是中间插入
 
         // 首先找到第i-1个节点
-        val precursorNode = getByIndex(i - 1)!!
+        val precursorNode = findByIndex(i - 1)!!
         // 创建要插入的节点对象,并让next指向原先的第i个节点
         val newNode = Entry(data, precursorNode.next)
 
@@ -124,7 +121,7 @@ class SingleLinkedWithoutHead<T> {
             first = second
             return
         }
-        val precursorNode = getByIndex(i - 1)!!
+        val precursorNode = findByIndex(i - 1)!!
         precursorNode.next = precursorNode.next?.next
     }
 
@@ -171,18 +168,16 @@ class SingleLinkedWithoutHead<T> {
         var cur:Entry<T>? = first ?: return
         var pre: Entry<T>? = null
         if(cur?.data == data) { // first.data = data 单独处理
-            // 1.同样找完整链
             while (cur != null) {
                 if (cur.next?.data == data)
-                    pre = cur // 记录data节点的前驱节点
+                    pre = cur
                 cur = cur.next
-        }
-            if (pre == null){  //如果找完整条链前驱节点为空  就删除first
+            }
+            if (pre == null){
                 first = second
-                length--
                 return
             }
-             // 不为空
+
             length--
             pre.next = pre.next?.next
 
